@@ -128,7 +128,7 @@ string TPostfix::ToPostfix()
 				split(postfix);
 				count++;
 			}
-			else //if (compare(infix[i], op.Back()) == "compare"|| compare(infix[i], op.Back())=="less")
+			else 
 			{
 				split(postfix);
 				while (!(op.IsEmpty()))
