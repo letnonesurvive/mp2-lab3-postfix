@@ -19,6 +19,7 @@ string TPostfix::compare(char a, char b)
 		return "greater";
 	else if ((a == '+' || a == '-') && (b == '*' || b == '/'))//меньшего порядка
 		return "less";
+	//else return"last elem if bracket";
 }
 
 void TPostfix::variable_input(string &v)
@@ -128,7 +129,7 @@ string TPostfix::ToPostfix()
 				split(postfix);
 				count++;
 			}
-			else 
+			else if (compare(infix[i], op.Back()) == "less")
 			{
 				split(postfix);
 				while (!(op.IsEmpty()))
@@ -141,6 +142,13 @@ string TPostfix::ToPostfix()
 				}
 				op.Put(infix[i]);
 				count++;
+			}
+			else if (compare(infix[i], op.Back()) == "compare")
+			{
+				split(postfix);
+				postfix += op.Get();
+				op.Put(infix[i]);
+				split(postfix);
 			}
 		}
 		else

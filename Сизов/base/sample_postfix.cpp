@@ -7,7 +7,7 @@ using namespace std;
 int main()
 {
 	string expression;
-	TPostfix postfix("a+b-a*b");
+	TPostfix postfix("1+2*3/4-5");
 	double res;
 	setlocale(LC_ALL, "Russian");
 	//cout << "Введите арифметическое выражение: ";
