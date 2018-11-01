@@ -1,5 +1,7 @@
 ﻿#include "postfix.h"
 #include "stack.h"
+#include <vector>
+#include <regex>
 
 bool TPostfix::operand(char p)
 {
@@ -17,7 +19,31 @@ string TPostfix::compare(char a, char b)
 		return "greater";
 	else if ((a == '+' || a == '-') && (b == '*' || b == '/'))//меньшего порядка
 		return "less";
-	//else return"last elem is bracket";
+}
+
+void TPostfix::variable_input(string &v)
+{
+	string tmp;
+	for (int i = 0; i < v.size(); i++)
+	{
+		if((int(v[i])>=65&&int(v[i])<=90)||(int(v[i])>=97&&int(v[i])<=122))//значения переменных в диапазоне
+		{
+			cout << "Введите переменную " << v[i]<<':';
+			cin >> tmp;
+			char var = v[i];
+			int j = i;
+			while (j < v.size())//замена всех одинаковых переменных в строке
+			{
+				if (var == v[j])
+				{
+					v.erase(j, 1);
+					v.insert(j, tmp);
+					j += tmp.size();
+				}
+				else j++;
+			}
+		}
+	}
 }
 
 bool TPostfix::brackets()//проверка на расстановку скобок
@@ -29,16 +55,12 @@ bool TPostfix::brackets()//проверка на расстановку скоб
 			left++;
 		else if (infix[i] == ')')
 			right++;
+		if (right > left)
+			throw"ошибка в скобках";
 	}
 	if (left == right)
 		return true;
 	else return false;
-}
-
-void TPostfix::split(string &str)//разделить запятыми строчку
-{
-	if (str.back() != ',')
-		str += ',';
 }
 
 bool TPostfix::term()//проверка на колличество операндов и операций
@@ -63,6 +85,12 @@ bool TPostfix::term()//проверка на колличество операн
 	if (operands == operations + 1)
 		return true;
 	else return false;
+}
+
+void TPostfix::split(string &str)//разделить запятыми строчку
+{
+	if (str.back() != ',')
+		str += ',';
 }
 
 string TPostfix::ToPostfix()
@@ -131,8 +159,9 @@ string TPostfix::ToPostfix()
 
 double TPostfix::Calculate()
 {
-	if (!term())
+	if (!term()||postfix=="")
 		throw "Недостаточно операндов";
+	variable_input(postfix);
 	TStack<double> result(infix.size());
 	string tmp;
 	for (int i = 0; i < postfix.size(); i++)
@@ -146,7 +175,7 @@ double TPostfix::Calculate()
 				tmp += postfix[i];
 				i++;
 			}
-			result.Put(stof(tmp));
+			result.Put(atof(tmp.c_str()));
 			tmp = "";
 		}
 		else

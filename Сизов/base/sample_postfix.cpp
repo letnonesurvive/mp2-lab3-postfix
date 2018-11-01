@@ -7,9 +7,8 @@ using namespace std;
 int main()
 {
 	string expression;
-	TPostfix postfix("(((1+23)*1-22)+5)*2-7");
+	TPostfix postfix("a+b-a*b");
 	double res;
-
 	setlocale(LC_ALL, "Russian");
 	//cout << "Введите арифметическое выражение: ";
 	//cin >> expression;
@@ -20,4 +19,5 @@ int main()
 	res = postfix.Calculate();
 	cout << res << endl;
 	return 0;
+
 }

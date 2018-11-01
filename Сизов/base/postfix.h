@@ -15,8 +15,9 @@ class TPostfix
 	bool brackets();
 	bool term();
 	void split(string &str);
+	void variable_input(string &v);
 public:
-	TPostfix(string _inf)
+	TPostfix(string _inf="")
 	{
 		infix = _inf;
 	}

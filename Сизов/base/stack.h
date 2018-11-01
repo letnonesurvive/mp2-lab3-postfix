@@ -45,7 +45,7 @@ public:
 		else return *this;
 	}
 
-	TStack(const TStack &s)
+	TStack(const TStack<T> &s)
 	{
 		pMem = new T[s.size];
 		size = s.size;
@@ -54,6 +54,24 @@ public:
 			pMem[i] = s.pMem[i];
 	}
 
+	bool operator==(const TStack &st) const
+	{
+		if (this->size != st.size)
+			return false;
+		else
+		{
+			for (int i = 0; i < size; i++)
+			{
+				if (this->pMem[i] != st.pMem[i])
+					return false;
+			}
+			return true;
+		}
+	}
+	bool operator!=(const TStack &st) const
+	{
+		return!(*this == st);
+	}
 	T Back()//чему равен последний элемент
 	{
 		return pMem[top];
@@ -89,6 +107,16 @@ public:
 		if (top == size - 1)
 			return true;
 		else return false;
+	}
+
+	int Size()
+	{
+		return size;
+	}
+
+	int Top()
+	{
+		return top;
 	}
 
 	friend  ostream& operator<<(ostream &os, TStack<T> &st)
