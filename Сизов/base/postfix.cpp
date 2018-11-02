@@ -3,13 +3,13 @@
 #include <vector>
 #include <regex>
 
-bool TPostfix::operand(char p)
+bool TPostfix::Operand(char p)
 {
 	if (p == '+' || p == '-' || p == '*' || p == '/' || p == '(' || p == ')')
 		return true;
 	else return false;
 }
-string TPostfix::compare(char a, char b)
+string TPostfix::Compare(char a, char b)
 {
 	if ((a == '*' || a == '/') && (b == '*' || b == '/'))//одного порядка
 		return "compare";
@@ -22,7 +22,7 @@ string TPostfix::compare(char a, char b)
 	//else return"last elem if bracket";
 }
 
-void TPostfix::variable_input(string &v)
+void TPostfix::Input(string &v)
 {
 	string tmp;
 	for (int i = 0; i < v.size(); i++)
@@ -47,7 +47,7 @@ void TPostfix::variable_input(string &v)
 	}
 }
 
-bool TPostfix::brackets()//проверка на расстановку скобок
+bool TPostfix::Brackets()//проверка на расстановку скобок
 {
 	int left = 0, right = 0;
 	for (int i = 0; i < infix.size(); i++)
@@ -64,14 +64,14 @@ bool TPostfix::brackets()//проверка на расстановку скоб
 	else return false;
 }
 
-bool TPostfix::term()//проверка на колличество операндов и операций
+bool TPostfix::Term()//проверка на колличество операндов и операций
 {
 	int operands = 0, operations = 0;
 	for (int i = 0; i < infix.size(); i++)
 	{
 		if (infix[i] == '+' || infix[i] == '-' || infix[i] == '*' || infix[i] == '/')
 			operations++;
-		else if (!operand(infix[i]))
+		else if (!Operand(infix[i]))
 		{
 			while (infix[i] != '+' && infix[i] != '-'  && infix[i] != '*'  && infix[i] != '/')
 			{
@@ -88,7 +88,7 @@ bool TPostfix::term()//проверка на колличество операн
 	else return false;
 }
 
-void TPostfix::split(string &str)//разделить запятыми строчку
+void TPostfix::Split(string &str)//разделить запятыми строчку
 {
 	if (str.back() != ',')
 		str += ',';
@@ -96,18 +96,18 @@ void TPostfix::split(string &str)//разделить запятыми стро�
 
 string TPostfix::ToPostfix()
 {
-	if (!brackets())
+	if (!Brackets())
 		throw"ошибка в расстановке скобок";
 	int count = -1;//счетчик операндов
 	TStack<char> op(infix.size());
 	for (int i = 0; i < infix.size(); i++)
 	{
-		if (operand(infix[i]))
+		if (Operand(infix[i]))
 		{
 			if (op.IsEmpty() || infix[i] == '(')
 			{
 				if (infix[i] != '(')
-					split(postfix);
+					Split(postfix);
 				op.Put(infix[i]);
 				count++;
 				continue;
@@ -116,39 +116,39 @@ string TPostfix::ToPostfix()
 			{
 				while (op.Back() != '(')
 				{
-					split(postfix);
+					Split(postfix);
 					postfix += op.Get();
 					count--;
 				}
 				op.Get();
 				count--;
 			}
-			else if ((op.Back()) == '(' || compare(infix[i], op.Back()) == "greater")
+			else if ((op.Back()) == '(' || Compare(infix[i], op.Back()) == "greater")
 			{
 				op.Put(infix[i]);
-				split(postfix);
+				Split(postfix);
 				count++;
 			}
-			else if (compare(infix[i], op.Back()) == "less")
+			else if (Compare(infix[i], op.Back()) == "less")
 			{
-				split(postfix);
+				Split(postfix);
 				while (!(op.IsEmpty()))
 				{
 					if (op.Back() == '(')
 						break;
 					postfix += op.Get();
-					split(postfix);
+					Split(postfix);
 					count--;
 				}
 				op.Put(infix[i]);
 				count++;
 			}
-			else if (compare(infix[i], op.Back()) == "compare")
+			else if (Compare(infix[i], op.Back()) == "compare")
 			{
-				split(postfix);
+				Split(postfix);
 				postfix += op.Get();
 				op.Put(infix[i]);
-				split(postfix);
+				Split(postfix);
 			}
 		}
 		else
@@ -157,7 +157,7 @@ string TPostfix::ToPostfix()
 		{
 			for (count; count >= 0; count--)
 			{
-				split(postfix);
+				Split(postfix);
 				postfix += op.Get();
 			}
 		}
@@ -167,16 +167,16 @@ string TPostfix::ToPostfix()
 
 double TPostfix::Calculate()
 {
-	if (!term()||postfix=="")
+	if (!Term()||postfix=="")
 		throw "Недостаточно операндов";
-	variable_input(postfix);
+	Input(postfix);
 	TStack<double> result(infix.size());
 	string tmp;
 	for (int i = 0; i < postfix.size(); i++)
 	{
 		if (postfix[i] == ',')
 			continue;
-		if (!operand(postfix[i]))
+		if (!Operand(postfix[i]))
 		{
 			while (postfix[i] != ',')
 			{

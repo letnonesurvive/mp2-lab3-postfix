@@ -10,12 +10,12 @@ class TPostfix
 {
 	string infix;
 	string postfix;
-	string compare(char a, char b);
-	bool operand(char p);
-	bool brackets();
-	bool term();
-	void split(string &str);
-	void variable_input(string &v);
+	string Compare(char a, char b);
+	bool Operand(char p);
+	bool Brackets();
+	bool Term();
+	void Split(string &str);
+	void Input(string &v);
 public:
 	TPostfix(string _inf="")
 	{
